@@ -6,10 +6,13 @@ import { PoquemonModule } from './poquemon/poquemon.module';
 import { SeedModule } from './seed/seed.module';
 import { CommonModule } from './common/common.module';
 import { ConfigModule } from '@nestjs/config';
+import { EnvVariables } from './config/envConfig';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      load: [EnvVariables],
+    }),
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }),
     PoquemonModule,
     MongooseModule.forRoot(process.env.MONGODB_URL),

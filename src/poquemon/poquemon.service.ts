@@ -11,12 +11,13 @@ import { isObjectIdOrHexString, Model } from 'mongoose';
 import { CreatePoquemonDto } from './dto/create-poquemon.dto';
 import { UpdatePoquemonDto } from './dto/update-poquemon.dto';
 import { Poquemons } from './entities/poquemon.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PoquemonService {
   constructor(
     @InjectModel(Poquemons.name)
-    private readonly poquemonModel: Model<Poquemons>,
+    private readonly poquemonModel: Model<Poquemons>, //private readonly configurationService: ConfigService,
   ) {}
 
   @HttpCode(HttpStatus.CREATED)
