@@ -6,12 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
+  Query,
 } from '@nestjs/common';
 import { PoquemonService } from './poquemon.service';
 import { CreatePoquemonDto } from './dto/create-poquemon.dto';
 import { UpdatePoquemonDto } from './dto/update-poquemon.dto';
+import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id/parse-mongo-id.pipe';
+import { QueryParamsDto } from 'src/common/DTOs/QueryParamsDto';
 
-@Controller('poquemon')
+@Controller('Pokemon')
 export class PoquemonController {
   constructor(private readonly poquemonService: PoquemonService) {}
 
@@ -21,8 +25,8 @@ export class PoquemonController {
   }
 
   @Get()
-  findAll() {
-    return this.poquemonService.findAll();
+  findAll(@Query() queryParam: QueryParamsDto) {
+    return this.poquemonService.findAll(queryParam);
   }
 
   @Get(':term')
@@ -30,16 +34,16 @@ export class PoquemonController {
     return this.poquemonService.findOne(term);
   }
 
-  @Patch(':id')
+  @Put(':term')
   update(
-    @Param('id') id: string,
+    @Param('term') term: string,
     @Body() updatePoquemonDto: UpdatePoquemonDto,
   ) {
-    return this.poquemonService.update(id, updatePoquemonDto);
+    return this.poquemonService.update(term, updatePoquemonDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseMongoIdPipe) id: string) {
     return this.poquemonService.remove(id);
   }
 }

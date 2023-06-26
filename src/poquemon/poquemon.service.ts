@@ -33,8 +33,8 @@ export class PoquemonService {
     }
   }
 
-  async findAll() {
-    const data = await this.poquemonModel.find();
+  async findAll({ limit = 10, offset = 0 }) {
+    const data = await this.poquemonModel.find().limit(limit).skip(offset);
     return data;
   }
 
@@ -68,12 +68,22 @@ export class PoquemonService {
       await poquemon[0].updateOne(updatePoquemonDto);
       return { ...poquemon[0].toJSON(), ...updatePoquemonDto };
     } catch (error) {
+      if (error.code === 11000) {
+        throw new BadRequestException(
+          'Ya existe un poke con algunos de estos da estos datos',
+        );
+      }
       console.log(error);
+      throw new InternalServerErrorException('hable con el admin');
     }
   }
 
   async remove(id: string) {
-    const data = await this.poquemonModel.findByIdAndRemove({ _id: id });
-    return { dataEliminada: data };
+    const response = await this.poquemonModel.findByIdAndDelete({
+      _id: id,
+    });
+    if (!response)
+      throw new BadRequestException('No se elimino ningún Pokemon');
+    return response;
   }
 }
