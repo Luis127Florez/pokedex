@@ -15,7 +15,7 @@ import { EnvVariables } from './config/envConfig';
     }),
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }),
     PoquemonModule,
-    MongooseModule.forRoot(process.env.MONGODB_URL),
+    MongooseModule.forRoot(process.env.MONGODB_URL_ATLAS),
     SeedModule,
     CommonModule,
   ],
